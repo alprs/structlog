@@ -351,3 +351,27 @@ class StackInfoRenderer(object):
                 _find_first_app_frame_and_name()[0]
             )
         return event_dict
+
+
+class StackInfoPrettyPrinter(object):
+    """
+    Pretty-print stack information if `stack_info` is True.
+
+    :param file file: Target file for output (default: ``sys.stdout``).
+
+    This processor is mostly for development and testing so you can read
+    stack info properly formatted.
+    """
+
+    def __init__(self, file=None):
+        if file is not None:
+            self._file = file
+        else:
+            self._file = sys.stdout
+
+    def __call__(self, logger, name, event_dict):
+        if event_dict.pop("stack_info", None):
+            print(_format_stack(
+                _find_first_app_frame_and_name()[0]
+            ))
+        return event_dict
